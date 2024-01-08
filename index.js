@@ -587,7 +587,7 @@ client.on("messageCreate", async (msg) => {
 	);
   }
 });
-client.login("MTE0ODIyMTg2OTEzNzM0MjUzNQ.Gcxdkc.T_6P_gV-1df2Qk8EeQxhLLXkePh3-ckMLuv1t0");
+client.login(process.env['TOKEN']);
 http
   .createServer(function (req, res) {
 	res.write("I'm alive");
