@@ -8,7 +8,7 @@ import { Parse } from "./bro-lang/front/parser.js";
 import { Eval } from "./bro-lang/back/interpret.js";
 import { ENV } from "./bro-lang/back/var.js";
 import chalk from "chalk";
-import util from "util";
+let avatar_url = "https://cdn.discordapp.com/avatars/1148221869137342535/9c2693d9dffed3bc413ddf5f6b760c7f.webp"
 // const chalk = require("chalk")
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 import http from "http";
@@ -324,8 +324,7 @@ client.on("interactionCreate", async (int) => {
 		components: [],
 		actions: {},
 		username: "dora",
-		avatar_url:
-		  "https://cdn.discordapp.com/avatars/1148221869137342535/6730428f633279cd71fb3d22e44e336a.webp?size=80",
+		avatar_url
 	  });
 	}
 	let code = int.options.get("code")?.value.replace("\\n", "\n") || "";
@@ -383,8 +382,7 @@ client.on("interactionCreate", async (int) => {
 		components: [],
 		actions: {},
 		username: "dora",
-		avatar_url:
-		  "https://cdn.discordapp.com/avatars/1148221869137342535/6730428f633279cd71fb3d22e44e336a.webp?size=80",
+		avatar_url
 	  });
 	  spit(code.toString());
 	  console.log("done");
@@ -419,8 +417,7 @@ client.on("interactionCreate", async (int) => {
 			components: [],
 			actions: {},
 			username: "dora",
-			avatar_url:
-			  "https://cdn.discordapp.com/avatars/1148221869137342535/6730428f633279cd71fb3d22e44e336a.webp?size=80",
+			avatar_url
 		  });
 		  const response = await fetch(url);
 		  if (!code_file.attachment.name.endsWith(".bro")) {
@@ -475,15 +472,13 @@ client.on("interactionCreate", async (int) => {
 	  components: [],
 	  actions: {},
 	  username: "dora",
-	  avatar_url:
-		"https://cdn.discordapp.com/avatars/1148221869137342535/6730428f633279cd71fb3d22e44e336a.webp?size=80",
+	  avatar_url
 	});
 	replay(int, "dora " + str, int.user);
   }
   if (int.commandName == "dora_nnn" && dev) {
 	let d = new Date();
 	let mood = int.options.get("moods").value;
-	if (d.getMonth() == 10) {
 	  int.reply({
 		content: int.user.displayName + "'s nnn day " + d.getDate(),
 		tts: false,
@@ -525,9 +520,7 @@ client.on("interactionCreate", async (int) => {
 		actions: {},
 		username: "dora",
 	  });
-	} else {
-	  int.replay("bro its not november");
-	}
+	
   } 
   if (int.commandName == "dora_code") {
 	// function erorr(value) {
@@ -557,6 +550,49 @@ client.on("interactionCreate", async (int) => {
 	// }
     // file written successfully
   });
+	// fs.appendFile("./other/data.bro", code, () => {
+	  // compile();
+	  // file written successfully
+	// });
+  }
+  if (int.commandName == "dora_meme") {
+	fetch("https://meme-api.com/gimme/dankmemes")
+		.then((response) => response.json())
+		.then((data) => {
+			int.reply({
+				content: "/dora_meme",
+				tts: true,
+				embeds: [
+				  {
+					id: 605268405,
+					description:
+					  "enjoy your meme",
+					fields: [],
+					author: {
+					  name: int.user.displayName,
+					  url: "https://github.com/hasan-bro-coder/Discord-Bot",
+					  icon_url: int.user.avatarURL(),
+					},
+					image: {
+						url: data.url,
+					},
+					title: data.title,
+					color: 3900150,
+					url: "https://github.com/hasan-bro-coder/Discord-Bot",
+					footer: {
+					  text: "made by hsn-bro-coder",
+					  icon_url:
+						"https://cdn.discordapp.com/avatars/1110868817229389824/3da687734081a38e32c7f5b8acb1399c.webp?size=80",
+					},
+					// timestamp: "2023-12-01T18:00:00.000Z",
+				  },
+				],
+				components: [],
+				actions: {},
+				username: "dora",
+				avatar_url
+			}); 
+	}); 
 	// fs.appendFile("./other/data.bro", code, () => {
 	  // compile();
 	  // file written successfully
