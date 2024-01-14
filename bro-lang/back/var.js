@@ -175,7 +175,7 @@ export class ENV {
             ? console.log(util.inspect(data, true, 12, true))
             : 
 			// console.log(data,that.msg,that.msg_resolve());
-            that.msg_resolve()?.channel.send(String(data)||"?")
+            that.msg_resolve()?.send(String(data)||"?")
 
         }
         val.forEach((element) => print(element?.value || element));
@@ -216,7 +216,7 @@ export class ENV {
           this,
         ).interpret();
         }catch(e){
-        that.msg_resolve()?.channel.send(String(e.message))
+        that.msg_resolve()?.send(String(e.message))
         console.log(e.message)
         }
         break;

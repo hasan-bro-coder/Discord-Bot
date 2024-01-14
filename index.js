@@ -168,19 +168,23 @@ async function replay(msg, content, author) {
 	  else if (content.match(/nig[gae]*/g)) {
 		msg.channel.send(content + " who");
 		msg.channel.send((msg.user || "bro") + " your being racist bro");
-	  } else if (
+	  } else if(content.match("die")){
+		msg.channel.send("as your wish master");
+		msg.channel.send("im dead");
+		process.exit(0)
+	  }else if (
 		content.match("turn on self destruct mode in") ||
+		content.match("die") ||
 		content.match("self destruct in")
 	  ) {
 		msg.channel.send("as your wish master");
 		msg.channel.send("turning on self destruct mode in");
-		for (let i = Number(content.split("in")[1]); i > 0; i--) {
+		dev = false;
+		for (let i = Number(content.split("in")[1] || 10); i > 0; i--) {
 		  msg.channel.send(`${i}`);
 		  await sleep(1100);
 		}
 		msg.channel.send("im dead");
-		dev = false;
-
 		// msg.reply(content + " who");
 		// msg.channel.send((msg.user || "bro") + " your being racist bro");
 	  } else if (content.match("stop")) {
@@ -219,7 +223,15 @@ async function replay(msg, content, author) {
 		let isthere = false;
 		let dora_msg = content.split("dora ");
 		dora_msg.shift();
-		envs.msg = msg
+		envs.msg = {
+			send: (data)=>{
+				if(!dev) return 0
+				msg.channel.send(data)
+			}
+		  } 
+		  envs.add_vars("msg", {
+			content: { type: "STR", value: content },
+		  });
 		let rest = res.eval_function_run(
 		  {
 			type: "FUN_CALL",
@@ -295,6 +307,10 @@ client.on("ready", () => {
   console.log("Logged in!");
 });
 client.on("interactionCreate", async (int) => {
+	if (!dev) {
+	int.channel.reply("dora is in dev mode")
+	return 0
+}
   if (int.commandName == "dora_bro") {
 	function print(data) {
 	  int.channel.send({
@@ -331,7 +347,17 @@ client.on("interactionCreate", async (int) => {
 	let code_file = int.options.get("code_file");
 	function spit(data) {
 	  // console.log(data.toString());e,URL.createObjectURL(cod_file)
-	  let envs = new ENV(undefined,int);
+	  let msg = {
+		send: (data)=>{
+			if(!dev) return 0
+			int.channel.send(data)
+		}
+	  } 
+	  let envs = new ENV(undefined,msg);
+	  envs.add_vars("msg", {
+		pi: { type: "STR", value: "" },
+      goldenRatio: { type: "NUMBER", value: 1.618 },
+	  });
 	  // console.log("-----------\n");
 	  // console.time()
 	  let lex_res = new Lexer(data.toString());
@@ -606,12 +632,16 @@ client.on("messageCreate", async (msg) => {
 	(msg.content.match("turn off self destruct mode") ||
 	  msg.content.match("refresh"))
   ) {
-	// dev = true
-	// stops = false
-	msg.reply(
-	  "nuh/uh my man aint doing it bro you aint my master and i aint your slave " +
-		msg.author?.displayName
-	);
+	if (msg.author?.displayName) {
+		dev = true
+		stops = false
+	}else{
+
+		msg.reply(
+			  "nuh/uh my man aint doing it bro you aint my master and i aint your slave " +
+				msg.author?.displayName
+			);
+		}
 	return 0;
   }
   if (dev) {
