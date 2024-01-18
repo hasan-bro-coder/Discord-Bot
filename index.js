@@ -700,7 +700,7 @@ var left = 24 - start.getHours();
 // }
 function timeWatcher() {
 	let date = new Date()
-	if (date.getHours() == 16){
+	if (date.getHours() == 24){
 		// console.log(new Date().toLocaleDateString(),Object.keys(json_data.date),Object.keys(json_data.date).includes(new Date().toLocaleDateString()));
 		if (Object.keys(json_data.date).includes(date.getDate() + "/" + (date.getMonth()+1))) {
 			let data = json_data.date[date.getDate() + "/" + (date.getMonth()+1)]
