@@ -91,7 +91,7 @@ function spit(data) {
 });
 
 async function replay(msg, content, author) {
-  log(content);
+  log(author.displayName,content);
   if (content.includes("nega") || content.includes("nigge") || content.includes("nigger")) {
 	msg.delete();
 	  msg.channel.send(author.username+" said: "+content.replace("nega", "n-word").replace("nigger" , "n-word").replace("nigge", "n-word"));
@@ -655,12 +655,12 @@ client.on("interactionCreate", async (int) => {
 		  })
 		  return 0
 	}
-	json_data.date[day] = {channel: channel.channel.id,name: name.value,date: dates[2]}
+	json_data.date[day] = {channel: channel.channel.id,name: {id:name.value,name: name.user.displayName},date: dates[2]}
 	fs.writeFile('./other/data.json', JSON.stringify(json_data), err => {
 		console.log("written")
 	});
 	int.reply("done")
-	console.log(date,day)
+	console.log(date,day,name)
   }
 });
 client.on("messageCreate", async (msg) => {
@@ -706,14 +706,43 @@ function timeWatcher() {
 			let data = json_data.date[date.getDate() + "/" + (date.getMonth()+1)]
 			let channel = data.channel
 			let channelt = client.channels.cache.find(channels => channels.id == channel)
-			let name = data.name
-			channelt?.send(`Happy birth day to <@${name}>
-Happy birthday to <@${name}>
-Happy birthday to dear <@${name}>
-hope you have a good time homie
-happy birthday from everyone in the server
-congrats you are now ${date.getFullYear() - Number(data.date)}
-			`)
+			let name = data.name.id
+			channelt?.send({
+				"content": `Happy birth day to <@${name}> 🥳\nHappy birthday to <@${name}> 🎉\nHappy birthday to dear <@${name}>🎊\nhope you have a good time homie\nhappy birthday from everyone in the server\ncongrats you are now ${date.getFullYear() - Number(data.date)}\n\t\t\t`,
+				"tts": false,
+				"embeds": [
+				  {
+					"id": 386956980,
+					"description": `birth date: ${date.getDate() + "/" + (date.getMonth()+1)+"/"+data.date}\nage: ${date.getFullYear() - Number(data.date)}\nname: ${data.name.name}`,
+					"fields": [],
+					"author": {
+					  "name": "Dora"
+					},
+					"title": "happy birthday to you",
+					"thumbnail": {
+					  "url": "https://media1.tenor.com/m/y0zptlFKiYIAAAAC/yay-kitty.gif"
+					},
+					"color": 1023
+				  },
+				  {
+					"id": 475607252,
+					"description": `192.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String(Math.round(Math.random())*9)}.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String((Math.round(Math.random())*9 < 5 ?Math.round(Math.random())*9 : ""))}`,
+					"fields": [],
+					"author": {
+					  "name": "HSN-BRO-CODER",
+					  "icon_url": "https://cdn.discordapp.com/avatars/1110868817229389824/86ce0f880f1cee951af0b39784d91cde.webp"
+					},
+					"title": "your Birth Day gift:",
+					"color": 16711680,
+					"footer": {
+					  "text": "enjoy the rest of your day"
+					}
+				  }
+				],
+				"components": [],
+				"actions": {},
+				"username": data.name.name
+			  })
 		}
 	}
  else{
