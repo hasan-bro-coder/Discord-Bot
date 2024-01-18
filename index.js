@@ -625,14 +625,42 @@ client.on("interactionCreate", async (int) => {
   }
   if (int.commandName == "dora_wish"){
 	let date = int.options.get("date").value
+	let dates = date.split("/")
+	let day = dates[0] +"/"+ dates[1]
 	let channel = int.options.get("channel");
 	let name = int.options.get("user");
-	json_data.date[date] = {channel: channel.channel.id,name: name.value}
+	if (!(name && date && channel && dates.length == 3)) {
+		int.reply({
+			content: "error ocurd",
+			embeds: [
+			  {
+				id: 605268405,
+				description: err.message + "try again later",
+				fields: [],
+				author: {
+				  name: author?.displayName,
+				  url: "https://github.com/hasan-bro-coder/bot",
+				  icon_url: author?.avatarURL(),
+				},
+				color: 15548997,
+				url: "https://github.com/hasan-bro-coder/bot",
+				footer: {
+				  text: "made by hsn-bro-coder",
+				  icon_url:
+					"https://cdn.discordapp.com/avatars/1110868817229389824/3da687734081a38e32c7f5b8acb1399c.webp?size=80",
+				},
+				timestamp: "2023-12-01T18:00:00.000Z",
+			  },
+			],
+		  })
+		  return 0
+	}
+	json_data.date[day] = {channel: channel.channel.id,name: name.value,date: dates[2]}
 	fs.writeFile('./other/data.json', JSON.stringify(json_data), err => {
 		console.log("written")
 	});
 	int.reply("done")
-	console.log(date,name)
+	console.log(date,day)
   }
 });
 client.on("messageCreate", async (msg) => {
@@ -671,10 +699,11 @@ var left = 24 - start.getHours();
 	// console.log("It's over 10am");
 // }
 function timeWatcher() {
-	if (new Date().getHours() == 24){
-		console.log(new Date().toLocaleDateString(),Object.keys(json_data.date),Object.keys(json_data.date).includes(new Date().toLocaleDateString()));
-		if (Object.keys(json_data.date).includes(new Date().toLocaleDateString())) {
-			let data = json_data.date[new Date().toLocaleDateString()]
+	let date = new Date()
+	if (date.getHours() == 16){
+		// console.log(new Date().toLocaleDateString(),Object.keys(json_data.date),Object.keys(json_data.date).includes(new Date().toLocaleDateString()));
+		if (Object.keys(json_data.date).includes(date.getDate() + "/" + (date.getMonth()+1))) {
+			let data = json_data.date[date.getDate() + "/" + (date.getMonth()+1)]
 			let channel = data.channel
 			let channelt = client.channels.cache.find(channels => channels.id == channel)
 			let name = data.name
@@ -683,6 +712,7 @@ Happy birthday to <@${name}>
 Happy birthday to dear <@${name}>
 hope you have a good time homie
 happy birthday from everyone in the server
+congrats you are now ${date.getFullYear() - Number(data.date)}
 			`)
 		}
 	}
