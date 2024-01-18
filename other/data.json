@@ -1,1 +1,23 @@
-{"his":"say('hi')","looper":"var i = 0;loop(i<20){say(i);i+=1}","hellod":"say(\"what??\")","\"ahhhhhhh\"":"say(\"you good bro\")","uyjhu":"say(\"nuh\")","yo":"nuh","yos":"bruh","copy":"say(msg.content)","dora copy more":"say(msg.content+\"and more\")"}
+{
+  "code": {
+    "his": "say('hi')",
+    "looper": "var i = 0;loop(i<20){say(i);i+=1}",
+    "hellod": "say(\"what??\")",
+    "\"ahhhhhhh\"": "say(\"you good bro\")",
+    "uyjhu": "say(\"nuh\")",
+    "yo": "nuh",
+    "yos": "bruh",
+    "copy": "say(msg.content)",
+    "dora copy more": "say(msg.content+\"and more\")"
+  },
+  "date": {
+    "1/18/2024": {
+      "channel": "1197106095685111826",
+      "name": "882601788312809513"
+    },
+    "1/19/2024": {
+      "channel": "1133424078045319201",
+      "name": "882601788312809513"
+    }
+  }
+}

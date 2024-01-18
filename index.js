@@ -47,7 +47,6 @@ let json_data = {};
 
 fs.readFile("other/data.json", "utf8", (err, data) => {
 	json_data = JSON.parse(data)
-  // console.log(JSON.stringify(json_data),Object.keys(json_data).includes("his"));
 })
 
 function print(data) {
@@ -247,11 +246,11 @@ async function replay(msg, content, author) {
 		  msg.channel.send(rest?.value);
 		  isthere = true;
 		} else{
-      if (Object.keys(json_data).includes(dora_msg.join(""))) {
+      if (Object.keys(json_data.code).includes(dora_msg.join(""))) {
         let rest = res.eval_function_run(
           {
           type: "FUN_CALL",
-          args: [{ value: json_data[dora_msg.join("")], type: "STR", grp: "AST" }],
+          args: [{ value: json_data.code[dora_msg.join("")], type: "STR", grp: "AST" }],
           caller: { type: 'IDENT', value: 'run', grp: 'AST' },
           value: "run",
           },envs
@@ -567,7 +566,7 @@ client.on("interactionCreate", async (int) => {
 	let value = int.options.get("then").value;
   int.reply("done");
   console.log("running")
-  json_data[key] = value
+  json_data.code[key] = value
   fs.writeFile('./other/data.json', JSON.stringify(json_data), err => {
     console.log("written")
 	// if (!code.includes(";") || !code.match(/[;]|                             $/gim)){
@@ -624,6 +623,17 @@ client.on("interactionCreate", async (int) => {
 	  // file written successfully
 	// });
   }
+  if (int.commandName == "dora_wish"){
+	let date = int.options.get("date").value
+	let channel = int.options.get("channel");
+	let name = int.options.get("user");
+	json_data.date[date] = {channel: channel.channel.id,name: name.value}
+	fs.writeFile('./other/data.json', JSON.stringify(json_data), err => {
+		console.log("written")
+	});
+	int.reply("done")
+	console.log(date,name)
+  }
 });
 client.on("messageCreate", async (msg) => {
   if (
@@ -654,6 +664,35 @@ client.on("messageCreate", async (msg) => {
   }
 });
 client.login(process.env['TOKEN']);
+const start = new Date();
+var left = 24 - start.getHours();
+// if (millisTill10 < 0){
+	// millisTill10 += 86_400_000; // it's after 10am, try 10am tomorrow.
+	// console.log("It's over 10am");
+// }
+function timeWatcher() {
+	if (new Date().getHours() == 24){
+		console.log(new Date().toLocaleDateString(),Object.keys(json_data.date),Object.keys(json_data.date).includes(new Date().toLocaleDateString()));
+		if (Object.keys(json_data.date).includes(new Date().toLocaleDateString())) {
+			let data = json_data.date[new Date().toLocaleDateString()]
+			let channel = data.channel
+			let channelt = client.channels.cache.find(channels => channels.id == channel)
+			let name = data.name
+			channelt?.send(`Happy birth day to <@${name}>
+Happy birthday to <@${name}>
+Happy birthday to dear <@${name}>
+hope you have a good time homie
+happy birthday from everyone in the server
+			`)
+		}
+	}
+ else{
+	console.log("It's not 10am!",start.getHours(),new Date().toLocaleDateString())
+	setTimeout(timeWatcher,60 * 60 * 1000);
+ }
+}
+// timeWatcher();
+setTimeout(timeWatcher, 5000);
 http
   .createServer(function (req, res) {
 	res.write("I'm alive");
