@@ -91,7 +91,7 @@ function spit(data) {
 });
 
 async function replay(msg, content, author) {
-  log(author.displayName,content);
+  log(author.displayName+": ",content);
   if (content.includes("nega") || content.includes("nigge") || content.includes("nigger")) {
 	msg.delete();
 	  msg.channel.send(author.username+" said: "+content.replace("nega", "n-word").replace("nigger" , "n-word").replace("nigge", "n-word"));
@@ -656,11 +656,54 @@ client.on("interactionCreate", async (int) => {
 		  return 0
 	}
 	json_data.date[day] = {channel: channel.channel.id,name: {id:name.value,name: name.user.displayName},date: dates[2]}
-	fs.writeFile('./other/data.json', JSON.stringify(json_data), err => {
-		console.log("written")
-	});
-	int.reply("done")
-	console.log(date,day,name)
+	console.log(JSON.stringify(json_data))
+	try{
+		fs.writeFile('./other/data.json', JSON.stringify(json_data), err => {
+			
+		});
+	}catch(err){}
+	if(int.options.get("wish_rn")?.value){
+		let data={channel: channel.channel.id,name: {id:name.value,name: name.user.displayName},date: dates[2]}
+		let names = data.name.id
+		let date = new Date()
+		int.channel.send({
+			"content": `Happy birth day to <@${names}> 🥳\nHappy birthday to <@${names}> 🎉\nHappy birthday to dear <@${names}>🎊\nhope you have a good time\nhappy birthday from everyone in the server\ncongrats you are now ${date.getFullYear() - Number(data.date)}\n\t\t\t`,
+			"tts": false,
+			"embeds": [
+			  {
+				"id": 386956980,
+				"description": `birth date: ${date.getDate() + "/" + (date.getMonth()+1)+"/"+data.date}\nage: ${date.getFullYear() - Number(data.date)}\nname: ${data.name.name}`,
+				"fields": [],
+				"author": {
+				  "name": "Dora"
+				},
+				"title": "happy birthday to you",
+				"thumbnail": {
+				  "url": "https://media1.tenor.com/m/y0zptlFKiYIAAAAC/yay-kitty.gif"
+				},
+				"color": 1023
+			  },
+			//   {
+			// 	"id": 475607252,
+			// 	"description": `192.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String(Math.round(Math.random())*9)}.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String((Math.round(Math.random())*9 < 5 ?Math.round(Math.random())*9 : ""))}`,
+			// 	"fields": [],
+			// 	"author": {
+			// 	  "name": "HSN-BRO-CODER",
+			// 	  "icon_url": "https://cdn.discordapp.com/avatars/1110868817229389824/86ce0f880f1cee951af0b39784d91cde.webp"
+			// 	},
+			// 	"title": "your Birth Day gift:",
+			// 	"color": 16711680,
+			// 	"footer": {
+			// 	  "text": "enjoy the rest of your day"
+			// 	}
+			//   }
+			],
+			"components": [],
+			"actions": {},
+			"username": data.name.name
+		  })
+	}
+	int.reply("ok")
   }
 });
 client.on("messageCreate", async (msg) => {
@@ -698,9 +741,10 @@ var left = 24 - start.getHours();
 	// millisTill10 += 86_400_000; // it's after 10am, try 10am tomorrow.
 	// console.log("It's over 10am");
 // }
+let hour = process.env['HOUR'];
 function timeWatcher() {
 	let date = new Date()
-	if (date.getHours() == 24){
+	if (date.getHours() == hour){
 		// console.log(new Date().toLocaleDateString(),Object.keys(json_data.date),Object.keys(json_data.date).includes(new Date().toLocaleDateString()));
 		if (Object.keys(json_data.date).includes(date.getDate() + "/" + (date.getMonth()+1))) {
 			let data = json_data.date[date.getDate() + "/" + (date.getMonth()+1)]
