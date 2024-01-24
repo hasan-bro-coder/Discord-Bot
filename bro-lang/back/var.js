@@ -72,7 +72,7 @@ export class ENV {
     this.add_def_func("num", ["num"]);
   }
   add_vars(name, obj = {}) {
-    let arr = this.vars.get(name) || new Map();
+    let arr = this.vars.get(name)?.value || new Map();
     for (const key in obj) {
 		let val = obj[key]
 		if(val.type.match("FUNC_ANON") && val.body.length == 0){

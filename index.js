@@ -134,6 +134,10 @@ async function replay(msg, content, author) {
 		content.match("good job")
 	  ) {
 		msg.channel.send("thanks man");
+	  }else if (
+		content.match("ping")
+	  ) {
+		msg.channel.send("pong bro im alive");
 	  }
 	  // else if (content.match('who are you') ) {
 	  //   msg.channel.send(`man what the heck im dora an discord bot developed by your bro hasan. I am here beat the shit out of you`)
@@ -161,9 +165,9 @@ async function replay(msg, content, author) {
 		// msg.author.send('dick');
 		// msg.author.send('di');
 	  }
-	  // else if (content.match('alive')) {
-	  //     msg.reply('nah');
-	  // }
+	  else if (content.match('alive')) {
+	      msg.reply('nah');
+	  }
 	  else if (content.match(/nig[gae]*/g)) {
 		msg.channel.send(content + " who");
 		msg.channel.send((msg.user || "bro") + " your being racist bro");
@@ -219,22 +223,18 @@ async function replay(msg, content, author) {
 		# but here you are `);
 	  } else {
 		try{
-		let isthere = false;
-		let dora_msg = content.split("dora ");
-		dora_msg.shift();
+		let dora_msg = content.replace("dora ","");
 		envs.msg = {
 			send: (data)=>{
 				if(!dev) return 0
 				msg.channel.send(data)
 			}
 		  } 
-		  envs.add_vars("msg", {
-			content: { type: "STR", value: content },
-		  });
+		 
 		let rest = res.eval_function_run(
 		  {
 			type: "FUN_CALL",
-			args: [{ value: dora_msg.join(""), type: "STR", grp: "AST" }],
+			args: [{ value: dora_msg, type: "STR", grp: "AST" }],
 			caller: { type: 'IDENT', value: 'run', grp: 'AST' },
 			value: "compile",
 		  },envs
@@ -246,11 +246,14 @@ async function replay(msg, content, author) {
 		  msg.channel.send(rest?.value);
 		  isthere = true;
 		} else{
-      if (Object.keys(json_data.code).includes(dora_msg.join(""))) {
+      if (Object.keys(json_data.code).includes(dora_msg)) {
+		envs.add_vars("msg", {
+			content: { type: "STR", value: dora_msg },
+		  });
         let rest = res.eval_function_run(
           {
           type: "FUN_CALL",
-          args: [{ value: json_data.code[dora_msg.join("")], type: "STR", grp: "AST" }],
+          args: [{ value: json_data.code[dora_msg], type: "STR", grp: "AST" }],
           caller: { type: 'IDENT', value: 'run', grp: 'AST' },
           value: "run",
           },envs
@@ -258,7 +261,7 @@ async function replay(msg, content, author) {
       }
       else {
 	// try{
-		  let content = await chatgpt(dora_msg.join(""));
+		  let content = await chatgpt(dora_msg);
 		  content = content.replace("AI language model", "discord bot");
 		  content = content.replace("artificial intelligence", "discord bot");
 		  content = content.replace(/openai|(open ai)/gi, "hsn bro coder");
@@ -279,7 +282,7 @@ async function replay(msg, content, author) {
 			embeds: [
 			  {
 				id: 605268405,
-				description: err.message + "try again later",
+				description: JSON.stringify(err) + "try again later",
 				fields: [],
 				author: {
 				  name: author?.displayName,
@@ -353,10 +356,6 @@ client.on("interactionCreate", async (int) => {
 		}
 	  } 
 	  let envs = new ENV(undefined,msg);
-	  envs.add_vars("msg", {
-		pi: { type: "STR", value: "" },
-      goldenRatio: { type: "NUMBER", value: 1.618 },
-	  });
 	  // console.log("-----------\n");
 	  // console.time()
 	  let lex_res = new Lexer(data.toString());
@@ -768,20 +767,20 @@ function timeWatcher() {
 					},
 					"color": 1023
 				  },
-				  {
-					"id": 475607252,
-					"description": `192.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String(Math.round(Math.random())*9)}.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String((Math.round(Math.random())*9 < 5 ?Math.round(Math.random())*9 : ""))}`,
-					"fields": [],
-					"author": {
-					  "name": "HSN-BRO-CODER",
-					  "icon_url": "https://cdn.discordapp.com/avatars/1110868817229389824/86ce0f880f1cee951af0b39784d91cde.webp"
-					},
-					"title": "your Birth Day gift:",
-					"color": 16711680,
-					"footer": {
-					  "text": "enjoy the rest of your day"
-					}
-				  }
+				//   {
+				// 	"id": 475607252,
+				// 	"description": `192.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String(Math.round(Math.random())*9)}.${String(Math.round(Math.random()*9))+String(Math.round(Math.random()*9))+String((Math.round(Math.random())*9 < 5 ?Math.round(Math.random())*9 : ""))}`,
+				// 	"fields": [],
+				// 	"author": {
+				// 	  "name": "HSN-BRO-CODER",
+				// 	  "icon_url": "https://cdn.discordapp.com/avatars/1110868817229389824/86ce0f880f1cee951af0b39784d91cde.webp"
+				// 	},
+				// 	"title": "your Birth Day gift:",
+				// 	"color": 16711680,
+				// 	"footer": {
+				// 	  "text": "enjoy the rest of your day"
+				// 	}
+				//   }
 				],
 				"components": [],
 				"actions": {},
